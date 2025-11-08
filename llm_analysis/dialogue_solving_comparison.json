@@ -1,0 +1,250 @@
+{
+  "summary": {
+    "total": 10,
+    "models": [
+      "gpt4omini",
+      "llama31_8b"
+    ],
+    "all_correct": 2,
+    "all_wrong": 5,
+    "gpt4omini_correct": 4,
+    "gpt4omini_accuracy": 40.0,
+    "llama31_8b_correct": 3,
+    "llama31_8b_accuracy": 30.0
+  },
+  "results": [
+    {
+      "dialogue_id": 1,
+      "expected_answer": 3,
+      "gpt4omini": {
+        "answer": 5,
+        "correct": false,
+        "explanation": "Tom needs 2 weekends to paint (2 days), 1 weekend for the paint to dry (1 day), and 3 weekends to assemble the furniture (3 days). In total, this sums up to 6 days of work, which spans across 5 weekends since he can only work on weekends.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 3,
+        "correct": true,
+        "explanation": "",
+        "error": null
+      },
+      "all_correct": false,
+      "all_wrong": false,
+      "correct_models": [
+        "llama31_8b"
+      ],
+      "incorrect_models": [
+        "gpt4omini"
+      ]
+    },
+    {
+      "dialogue_id": 2,
+      "expected_answer": 16,
+      "gpt4omini": {
+        "answer": 17,
+        "correct": false,
+        "explanation": "The total time required is calculated as follows: 4 days to clear the park + 6 days to install the playground + 2 days to set up the park benches (which can be done concurrently with the playground installation) + 5 days for landscaping. The opening ceremony is the day after all tasks are completed, so we add 1 more day. Therefore, the total is 4 + 6 + 2 + 5 + 1 = 18 days.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 17,
+        "correct": false,
+        "explanation": "",
+        "error": null
+      },
+      "all_correct": false,
+      "all_wrong": true,
+      "correct_models": [],
+      "incorrect_models": [
+        "gpt4omini",
+        "llama31_8b"
+      ]
+    },
+    {
+      "dialogue_id": 3,
+      "expected_answer": 2,
+      "gpt4omini": {
+        "answer": 2,
+        "correct": true,
+        "explanation": "Alice can write 30 invitations per hour and Bob can write 20 invitations per hour. Together, they can write 50 invitations per hour. They work for 3 hours each day, so in one day, they can write 150 invitations (50 invitations/hour * 3 hours = 150 invitations). Therefore, they will complete the task in 1 day. However, since they can only dedicate 3 hours each day, it will take them 2 days to complete the task of writing 150 invitations.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 5,
+        "correct": false,
+        "explanation": "",
+        "error": null
+      },
+      "all_correct": false,
+      "all_wrong": false,
+      "correct_models": [
+        "gpt4omini"
+      ],
+      "incorrect_models": [
+        "llama31_8b"
+      ]
+    },
+    {
+      "dialogue_id": 4,
+      "expected_answer": 12,
+      "gpt4omini": {
+        "answer": 6,
+        "correct": false,
+        "explanation": "With four gardeners working simultaneously, each plot takes three hours to prepare. In a six-hour shift, each gardener can prepare one plot in three hours, allowing for two plots to be prepared by each gardener in a single shift. Therefore, in one shift, four gardeners can prepare a total of four plots. Since there are eight plots, it will take two shifts (6 hours) to prepare all plots.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 24,
+        "correct": false,
+        "explanation": "Since each plot takes 3 hours to prepare and there are 4 gardeners working simultaneously, the minimum time required to prepare one plot is 3 hours. With 8 plots, the total minimum time required is 8 * 3 = 24 hours.",
+        "error": null
+      },
+      "all_correct": false,
+      "all_wrong": true,
+      "correct_models": [],
+      "incorrect_models": [
+        "gpt4omini",
+        "llama31_8b"
+      ]
+    },
+    {
+      "dialogue_id": 5,
+      "expected_answer": 6,
+      "gpt4omini": {
+        "answer": 0,
+        "correct": false,
+        "explanation": "The timeline for the project is strictly defined, with no explicit buffer days mentioned for unexpected delays. The total duration of the project is 20 days, and all phases are tightly scheduled without any allowance for delays.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 4,
+        "correct": false,
+        "explanation": "The project timeline is 20 days, and the planned activities will take 4 + 3 + 5 + 2 = 14 days. This leaves 20 - 14 = 6 days for unexpected delays. However, considering the team has been using a project management tool to track progress and will have regular check-ins, it's likely that the team will be able to adjust their schedule to accommodate some delays. Therefore, the maximum number of days available for unexpected delays is 4, assuming the team can adjust their schedule to fit within the 20-day timeline.",
+        "error": null
+      },
+      "all_correct": false,
+      "all_wrong": true,
+      "correct_models": [],
+      "incorrect_models": [
+        "gpt4omini",
+        "llama31_8b"
+      ]
+    },
+    {
+      "dialogue_id": 6,
+      "expected_answer": 4,
+      "gpt4omini": {
+        "answer": 4,
+        "correct": true,
+        "explanation": "Sarah plans to cover about 300 miles each day. The total distance of the trip is 1,200 miles. Therefore, the total number of days for the trip can be calculated as 1,200 miles divided by 300 miles per day, which equals 4 days.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 4,
+        "correct": true,
+        "explanation": "",
+        "error": null
+      },
+      "all_correct": true,
+      "all_wrong": false,
+      "correct_models": [
+        "gpt4omini",
+        "llama31_8b"
+      ],
+      "incorrect_models": []
+    },
+    {
+      "dialogue_id": 7,
+      "expected_answer": 4,
+      "gpt4omini": {
+        "answer": 10,
+        "correct": false,
+        "explanation": "Maria has 37 vegetable plants and 10 plots, each holding 5 plants. She can plant 20 plants in 2 plots per day. To plant all 37 plants, she needs to prepare and plant 19 plots (since 37 plants exceed the capacity of 10 plots). Therefore, she needs 10 days to prepare and plant all her vegetable plants.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 7,
+        "correct": false,
+        "explanation": "",
+        "error": null
+      },
+      "all_correct": false,
+      "all_wrong": true,
+      "correct_models": [],
+      "incorrect_models": [
+        "gpt4omini",
+        "llama31_8b"
+      ]
+    },
+    {
+      "dialogue_id": 8,
+      "expected_answer": 14,
+      "gpt4omini": {
+        "answer": 14,
+        "correct": true,
+        "explanation": "",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 14,
+        "correct": true,
+        "explanation": "",
+        "error": null
+      },
+      "all_correct": true,
+      "all_wrong": false,
+      "correct_models": [
+        "gpt4omini",
+        "llama31_8b"
+      ],
+      "incorrect_models": []
+    },
+    {
+      "dialogue_id": 9,
+      "expected_answer": 17,
+      "gpt4omini": {
+        "answer": 15,
+        "correct": false,
+        "explanation": "The total time required for the tasks is calculated as follows: Plumbing takes 6 days, Electrical takes 4 days (after plumbing), Painting takes 3 days (after plumbing and electrical), Kitchen Equipment installation takes 2 days (after painting), and Furniture installation takes 2 days (after painting). The tasks are sequential, so the total is 6 + 4 + 3 + 2 + 2 = 17 days.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 15,
+        "correct": false,
+        "explanation": "",
+        "error": null
+      },
+      "all_correct": false,
+      "all_wrong": true,
+      "correct_models": [],
+      "incorrect_models": [
+        "gpt4omini",
+        "llama31_8b"
+      ]
+    },
+    {
+      "dialogue_id": 10,
+      "expected_answer": 7,
+      "gpt4omini": {
+        "answer": 7,
+        "correct": true,
+        "explanation": "Jenny needs to paint four walls, each requiring two coats. This totals 8 coats of paint. She can complete one coat on one wall in 2 hours, so she can do 2 coats in 4 hours (one wall) per day. In three days, she can complete 3 walls (6 coats) and then takes a day off. On the 5th day, she can finish the last wall (2 coats) in 4 hours. Therefore, the total time taken is 3 days of work, 1 day off, and 1 day to finish, totaling 5 days of work and 2 days off, resulting in 7 days in total.",
+        "error": null
+      },
+      "llama31_8b": {
+        "answer": 9,
+        "correct": false,
+        "explanation": "",
+        "error": null
+      },
+      "all_correct": false,
+      "all_wrong": false,
+      "correct_models": [
+        "gpt4omini"
+      ],
+      "incorrect_models": [
+        "llama31_8b"
+      ]
+    }
+  ]
+}

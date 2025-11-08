@@ -1,0 +1,11 @@
+__pycache__/
+venv/
+venv_py311/
+*.log
+encodings/
+models/
+training_log.txt
+training_rd.log
+training_verify.log
+generation_log.txt
+
