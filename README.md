@@ -1,6 +1,6 @@
-# OFALMA: Optimized Fact-Aware Language Model Adaptation
+# FALMA: Fact-Aware Language Model Adaptation
 
-**OFALMA** is a reinforcement learning-based memory management system for dialogue systems that learns to selectively preserve the most important information when memory is constrained. OFALMA significantly outperforms GPT's native summarization and other baseline methods, achieving **95% accuracy** with only 50% of the original dialogue content.
+**FALMA** is a reinforcement learning-based memory management system for dialogue systems that learns to selectively preserve the most important information when memory is constrained. FALMA significantly outperforms GPT's native summarization and other baseline methods, achieving **95% accuracy** with only 50% of the original dialogue content.
 
 ## 🎯 Key Results
 
@@ -8,21 +8,21 @@
 
 | Method | 25% Memory | 50% Memory | 75% Memory |
 |--------|------------|------------|------------|
-| **OFALMA (Pruning)** | 30% | **95%** ✅ | **95%** ✅ |
-| **OFALMA (Rate-Distortion)** | 35% | 85% | **95%** ✅ |
+| **FALMA (Pruning)** | 30% | **95%** ✅ | **95%** ✅ |
+| **FALMA (Rate-Distortion)** | 35% | 85% | **95%** ✅ |
 | **Custom Summary** | 80% | 85% | 85% |
 | **GPT Summary** | 5% | 5% | 45% |
 | **Token Buffer** | 5% | 5% | 25% |
 
 **Key Findings:**
-- **OFALMA pruning achieves 95% accuracy at 50% and 75% memory**, outperforming all baseline methods
+- **FALMA pruning achieves 95% accuracy at 50% and 75% memory**, outperforming all baseline methods
 - **10 percentage points better** than custom summary at 50% memory (95% vs 85%)
 - **50 percentage points better** than GPT's native summarization at 50% memory (95% vs 45%)
-- OFALMA learns that **Relevance and Emphasis** are the primary importance factors, while **Recency is essentially irrelevant** (0-4% weight)
+- FALMA learns that **Relevance and Emphasis** are the primary importance factors, while **Recency is essentially irrelevant** (0-4% weight)
 
 ## 📋 Overview
 
-OFALMA uses reinforcement learning (PPO) to learn optimal weights for four impact factors that determine the importance of dialogue facts:
+FALMA uses reinforcement learning (PPO) to learn optimal weights for four impact factors that determine the importance of dialogue facts:
 
 1. **Surprisal (S)**: How unexpected or novel the information is
 2. **Recency (R)**: Temporal position in the dialogue
@@ -40,7 +40,7 @@ The system offers two variants:
 1. **Clone the repository:**
 ```bash
 git clone https://github.com/toorajhelmi/alma.git
-cd OFALMA
+cd FALMA
 ```
 
 2. **Set up virtual environment:**
@@ -62,12 +62,12 @@ export TOGETHER_API_KEY="your-together-api-key-here"  # Optional, for Llama mode
 
 ### Basic Usage
 
-**Run OFALMA on a dialogue:**
+**Run FALMA on a dialogue:**
 ```bash
 python main.py
 ```
 
-**Train OFALMA weights for a specific memory ratio:**
+**Train FALMA weights for a specific memory ratio:**
 ```bash
 python training/train_ofalma_rl.py \
     --dataset data/dataset_100.json \
@@ -85,9 +85,9 @@ python experiments/varying_mem_experiment.py
 ## 📁 Code Structure
 
 ```
-OFALMA/
+FALMA/
 ├── core/
-│   ├── ofalma.py                    # Core OFALMA implementation
+│   ├── ofalma.py                    # Core FALMA implementation
 │   ├── token_buffer_memory.py       # Token buffer baseline
 │   ├── token_buffer_memory_with_summary.py  # GPT summary baseline
 │   └── token_buffer_memory_custom_summary.py  # Custom summary baseline
@@ -127,7 +127,7 @@ OFALMA/
 
 ### 1. Impact Factor Computation
 
-For each fact in a dialogue, OFALMA computes four impact factors:
+For each fact in a dialogue, FALMA computes four impact factors:
 - **S, Q, E**: Computed via LLM analysis of the dialogue
 - **R**: Computed from position: `(index + 1) / total_facts`
 
@@ -152,7 +152,7 @@ importance = sigmoid(θ_S × S + θ_R × R + θ_Q × Q + θ_E × E)
 
 ### 4. Reinforcement Learning
 
-OFALMA uses PPO to learn optimal weights:
+FALMA uses PPO to learn optimal weights:
 - **State**: Dialogue representation + current memory ratio
 - **Action**: 4D continuous vector (θ_S, θ_R, θ_Q, θ_E)
 - **Reward**: +1 for correct answer, -1 for incorrect
@@ -250,9 +250,9 @@ Results are saved as JSON with:
 - Average token usage
 - Per-dialogue results with expected vs predicted answers
 
-## 🔍 Why OFALMA Outperforms GPT Summarization
+## 🔍 Why FALMA Outperforms GPT Summarization
 
-1. **Learned Importance Criteria**: OFALMA learns which factors matter most (Relevance and Emphasis) rather than relying on generic summarization heuristics
+1. **Learned Importance Criteria**: FALMA learns which factors matter most (Relevance and Emphasis) rather than relying on generic summarization heuristics
 
 2. **Task-Specific Optimization**: Weights are optimized for question-answering accuracy, not general text summarization
 
@@ -264,7 +264,7 @@ Results are saved as JSON with:
 
 ## 📚 Documentation
 
-- **[RL Training Guide](docs/README_RL.md)**: Detailed guide for training OFALMA weights
+- **[RL Training Guide](docs/README_RL.md)**: Detailed guide for training FALMA weights
 - **[Installation Guide](docs/INSTALL_RL.md)**: Step-by-step installation instructions
 
 ## 🧪 Experimental Results Summary
@@ -279,7 +279,7 @@ Results are saved as JSON with:
 
 ### Token Efficiency
 
-- OFALMA pruning uses **92-95% of available token budget** efficiently
+- FALMA pruning uses **92-95% of available token budget** efficiently
 - Achieves optimal accuracy with **50% of original content**
 - No accuracy improvement beyond 50% memory (indicating optimal information selection)
 
