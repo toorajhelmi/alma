@@ -69,9 +69,9 @@ python main.py
 
 **Train FALMA weights for a specific memory ratio:**
 ```bash
-python training/train_ofalma_rl.py \
+python training/train_falma_rl.py \
     --dataset data/dataset_100.json \
-    --output models/ofalma_pruning_50 \
+    --output models/falma_pruning_50 \
     --timesteps 10000 \
     --buffer-size 180 \
     --model gpt-4o
@@ -87,13 +87,13 @@ python experiments/varying_mem_experiment.py
 ```
 FALMA/
 ├── core/
-│   ├── ofalma.py                    # Core FALMA implementation
+│   ├── falma.py                     # Core FALMA implementation
 │   ├── token_buffer_memory.py       # Token buffer baseline
 │   ├── token_buffer_memory_with_summary.py  # GPT summary baseline
 │   └── token_buffer_memory_custom_summary.py  # Custom summary baseline
 ├── training/
-│   ├── train_ofalma_rl.py          # PPO training script
-│   └── ofalma_env.py               # RL environment
+│   ├── train_falma_rl.py           # PPO training script
+│   └── falma_env.py                # RL environment
 ├── experiments/
 │   └── varying_mem_experiment.py   # Comparison experiment
 ├── scripts/
@@ -106,19 +106,19 @@ FALMA/
 
 ### Key Components
 
-#### `core/ofalma.py`
-- `apply_ofalma()`: Pruning-based memory management
-- `apply_ofalma_rate_distortion()`: Rate-distortion-based memory management
+#### `core/falma.py`
+- `apply_falma()`: Pruning-based memory management
+- `apply_falma_rate_distortion()`: Rate-distortion-based memory management
 - `compute_impact_scores()`: Computes importance scores using learned weights
 - `llm_impact_factors()`: LLM-based computation of S, Q, E factors
 
-#### `training/train_ofalma_rl.py`
+#### `training/train_falma_rl.py`
 - PPO training loop with adaptive learning rate
 - Automatic train/validation split (80/20)
 - Periodic evaluation and checkpointing
 - Logs weights and validation accuracy every 500 steps
 
-#### `training/ofalma_env.py`
+#### `training/falma_env.py`
 - Gymnasium-compatible RL environment
 - Computes rewards based on question-answering accuracy
 - Handles encoding computation and caching
@@ -210,9 +210,9 @@ Your dataset should be a JSON file with the following format:
 ### Step 2: Train for Specific Memory Ratio
 
 ```bash
-python training/train_ofalma_rl.py \
+python training/train_falma_rl.py \
     --dataset data/dataset_100.json \
-    --output models/ofalma_pruning_50 \
+    --output models/falma_pruning_50 \
     --timesteps 10000 \
     --buffer-size 180 \          # 50% of average dialogue length
     --model gpt-4o \

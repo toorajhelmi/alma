@@ -1,6 +1,6 @@
 # LLM Analysis Scripts
 
-This folder contains scripts to compare Llama vs GPT performance on OFALMA tasks.
+This folder contains scripts to compare Llama vs GPT performance on FALMA tasks.
 
 ## Scripts
 

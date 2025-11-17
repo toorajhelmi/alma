@@ -59,5 +59,5 @@ python3 -c "import torch; print(f'PyTorch {torch.__version__} installed successf
 ## Then Start Training
 
 ```bash
-python training/train_ofalma_rl.py --dataset data/dataset_100.json
+python training/train_falma_rl.py --dataset data/dataset_100.json
 ```

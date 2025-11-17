@@ -1,31 +1,31 @@
-# RL Training for OFALMA
+# RL Training for FALMA
 
 ## Quick Start
 
 **Train the model** (encodings are auto-computed if needed):
 ```bash
-python training/train_ofalma_rl.py --dataset data/dataset_100.json
+python training/train_falma_rl.py --dataset data/dataset_100.json
 ```
 
 Or with more options:
 ```bash
-python training/train_ofalma_rl.py \
+python training/train_falma_rl.py \
     --dataset data/dataset_100.json \
-    --output models/ofalma_ppo \
+    --output models/falma_ppo \
     --timesteps 10000 \
     --buffer-size 160
 ```
 
 **Optional**: Specify a custom encodings file:
 ```bash
-python training/train_ofalma_rl.py \
+python training/train_falma_rl.py \
     --dataset data/dataset_100.json \
     --encodings data/encodings/custom.encodings.json
 ```
 
 ## How It Works
 
-The environment (`ofalma_env.py`) automatically handles encodings:
+The environment (`falma_env.py`) automatically handles encodings:
 1. **Auto-detects encoding file path** based on dataset hash: `data/encodings/dataset_{hash}.encodings.json`
 2. **Checks if file exists** and matches the dataset (via hash)
 3. **If exists + matches**: Loads pre-computed encodings ✓
@@ -35,13 +35,13 @@ The environment (`ofalma_env.py`) automatically handles encodings:
 
 ## Files
 
-- `training/ofalma_env.py`: Gymnasium environment (auto-computes/loads encodings)
-- `training/train_ofalma_rl.py`: Training script
+- `training/falma_env.py`: Gymnasium environment (auto-computes/loads encodings)
+- `training/train_falma_rl.py`: Training script
 
 ## Arguments
 
 - `--dataset`: Path to dataset JSON file (default: `data/dataset_100.json`)
-- `--output`: Output directory for model (default: `models/ofalma_ppo`)
+- `--output`: Output directory for model (default: `models/falma_ppo`)
 - `--timesteps`: Total training timesteps (default: 10000)
 - `--buffer-size`: Token buffer size (default: 160)
 - `--train-ratio`: Train/validation split ratio (default: 0.8)

@@ -247,8 +247,8 @@ def compute_impact_scores(dialogue: List[str], verbose=False, impact_factors_lis
     return results
 
 
-def apply_ofalma(facts: List[str], max_tokens: int, impact_factors_list=None, impact_model: str = None, token_model: str = None):
-    """Prune facts using OFALMA scores: sort by importance and drop least important until fit token limit."""
+def apply_falma(facts: List[str], max_tokens: int, impact_factors_list=None, impact_model: str = None, token_model: str = None):
+    """Prune facts using FALMA scores: sort by importance and drop least important until fit token limit."""
     if token_model:
         llm = GetLlm(llm=token_model, fallback=False)
     else:
@@ -344,7 +344,7 @@ Provide a concise summary:"""
         return truncated if truncated else fact[:target_tokens * 4]
 
 
-def apply_ofalma_rate_distortion(
+def apply_falma_rate_distortion(
     facts: List[str], 
     max_tokens: int, 
     impact_factors_list=None,

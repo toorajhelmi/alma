@@ -15,7 +15,7 @@ import numpy as np
 
 def find_latest_run():
     """Find the latest training run directory."""
-    runs = sorted(glob.glob("models/ofalma_rate_distortion/run_*/"))
+    runs = sorted(glob.glob("models/falma_rate_distortion/run_*/"))
     if not runs:
         print("No training runs found")
         return None

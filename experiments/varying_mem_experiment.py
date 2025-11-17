@@ -27,11 +27,11 @@ from main import (  # type: ignore  # pylint: disable=wrong-import-position
     OPENAI_API_KEY,
     create_conversational_chain,
     print_results,
-    run_ofalma,
-    run_ofalma_rate_distortion,
+    run_falma,
+    run_falma_rate_distortion,
     run_oneshot_from_memory,
 )
-from core.ofalma import theta as OFALMA_THETA  # type: ignore  # pylint: disable=wrong-import-position
+from core.falma import theta as FALMA_THETA  # type: ignore  # pylint: disable=wrong-import-position
 
 
 @dataclass
@@ -201,8 +201,8 @@ def run_varying_memory_experiment(
         "token_buffer",
         "summary",
         "custom_summary",
-        "ofalma",
-        "ofalma_rate_distortion",
+        "falma",
+        "falma_rate_distortion",
     ]
 
     results: Dict[str, Dict[float, Dict[str, float]]] = {
@@ -220,7 +220,7 @@ def run_varying_memory_experiment(
     run_records: List[Dict[str, object]] = []
     failures: List[Dict[str, object]] = []
 
-    # Pre-computed, ratio-specific OFALMA weights learned via PPO RL (pruning method)
+    # Pre-computed, ratio-specific FALMA weights learned via PPO RL (pruning method)
     # 75% memory (buffer ≈ 260 tokens): best weights at step 10k (100% val, 87% train)
     # 50% memory (buffer ≈ 180 tokens): best weights at step 10k (100% val, 93% train)
     # 25% memory (buffer ≈ 90 tokens): best weights at step 10k (70% val, 54% train)
@@ -234,19 +234,19 @@ def run_varying_memory_experiment(
         memory_limit = max(1, int(round(avg_fact_tokens * prop)))
         print(f"\n--- Memory ratio {prop:.2f} (limit = {memory_limit} tokens) ---")
 
-        # Update OFALMA global theta to the ratio-specific trained weights, if available.
-        # This affects both pruning (`ofalma`) and rate-distortion (`ofalma_rate_distortion`)
-        # since they both compute importance using the global `theta` in `core.ofalma`.
+        # Update FALMA global theta to the ratio-specific trained weights, if available.
+        # This affects both pruning (`falma`) and rate-distortion (`falma_rate_distortion`)
+        # since they both compute importance using the global `theta` in `core.falma`.
         # We round the proportion to two decimals to match the keys above.
         rounded_prop = round(float(prop), 2)
         if rounded_prop in ratio_specific_theta:
             weights = ratio_specific_theta[rounded_prop]
-            OFALMA_THETA["S"] = weights["S"]
-            OFALMA_THETA["R"] = weights["R"]
-            OFALMA_THETA["Q"] = weights["Q"]
-            OFALMA_THETA["E"] = weights["E"]
+            FALMA_THETA["S"] = weights["S"]
+            FALMA_THETA["R"] = weights["R"]
+            FALMA_THETA["Q"] = weights["Q"]
+            FALMA_THETA["E"] = weights["E"]
             print(
-                f"  Using OFALMA weights for ratio {rounded_prop:.2f}: "
+                f"  Using FALMA weights for ratio {rounded_prop:.2f}: "
                 f"S={weights['S']:.3f}, R={weights['R']:.3f}, "
                 f"Q={weights['Q']:.3f}, E={weights['E']:.3f}"
             )
@@ -285,8 +285,8 @@ def run_varying_memory_experiment(
                                 evaluation_model=evaluation_model,
                             )
 
-                    elif approach_name == "ofalma":
-                        outcome_local = run_ofalma(
+                    elif approach_name == "falma":
+                        outcome_local = run_falma(
                             facts,
                             question,
                             buffer_size=memory_limit,
@@ -297,8 +297,8 @@ def run_varying_memory_experiment(
                             display=False,
                         )
 
-                    elif approach_name == "ofalma_rate_distortion":
-                        outcome_local = run_ofalma_rate_distortion(
+                    elif approach_name == "falma_rate_distortion":
+                        outcome_local = run_falma_rate_distortion(
                             facts,
                             question,
                             buffer_size=memory_limit,

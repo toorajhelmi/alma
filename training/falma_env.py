@@ -1,4 +1,4 @@
-"""Gymnasium environment for OFALMA RL training."""
+"""Gymnasium environment for FALMA RL training."""
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
@@ -7,13 +7,13 @@ import json
 import os
 import hashlib
 from langchain_openai import ChatOpenAI
-from core.ofalma import apply_ofalma, apply_ofalma_rate_distortion, llm_impact_factors
+from core.falma import apply_falma, apply_falma_rate_distortion, llm_impact_factors
 from core.experiment_utility import get_token_count_fn
 from main import INSTRUCTION, OPENAI_API_KEY, parse_json_response
 
 
-class OFALMAEnv(gym.Env):
-    """Environment for learning OFALMA coefficients via RL."""
+class FALMAEnv(gym.Env):
+    """Environment for learning FALMA coefficients via RL."""
     
     metadata = {"render_modes": ["human"], "render_fps": 4}
     
@@ -36,7 +36,7 @@ class OFALMAEnv(gym.Env):
         
         Args:
             dialogues: List of dialogues with 'dialogue' and 'answer' keys
-            llm: Language model instance for OFALMA and evaluation
+            llm: Language model instance for FALMA and evaluation
             buffer_size: Token limit for pruning
             encodings: Pre-computed impact factors (optional, will load from file if None)
             encodings_file: Path to encodings file (auto-generated if None, auto-computed if missing)
@@ -302,7 +302,7 @@ class OFALMAEnv(gym.Env):
         return encodings
     
     def _encode_dialogue(self, dialogue: List[str], dialogue_id: Optional[int] = None) -> np.ndarray:
-        """Encode dialogue using OFALMA impact factors."""
+        """Encode dialogue using FALMA impact factors."""
         facts = dialogue[:-1] if len(dialogue) > 1 else dialogue
         total_facts = len(facts)
         
@@ -315,7 +315,7 @@ class OFALMAEnv(gym.Env):
                 impact_factors_list = encoding_data.get('impact_factors', [])
         
         if impact_factors_list is None:
-            from core.ofalma import llm_impact_factors
+            from core.falma import llm_impact_factors
             computed = llm_impact_factors(facts, verbose=False, impact_model=self.impact_model)
             impact_factors_list = [
                 {
@@ -387,11 +387,11 @@ class OFALMAEnv(gym.Env):
         
         theta_S, theta_R, theta_Q, theta_E = action[0], action[1], action[2], action[3]
         
-        from core.ofalma import theta as global_theta
-        import core.ofalma as ofalma
+        from core.falma import theta as global_theta
+        import core.falma as falma
         
         original_theta = global_theta.copy()
-        ofalma.theta = {
+        falma.theta = {
             "S": float(theta_S),
             "R": float(theta_R),
             "Q": float(theta_Q),
@@ -411,7 +411,7 @@ class OFALMAEnv(gym.Env):
                 impact_model = getattr(self, 'impact_model', None)
                 token_model = getattr(self, 'token_model', None)
                 try:
-                    condensed_facts, stats = apply_ofalma_rate_distortion(
+                    condensed_facts, stats = apply_falma_rate_distortion(
                         self.current_facts,
                         self.buffer_size,
                         impact_factors_list=impact_factors_list,
@@ -425,7 +425,7 @@ class OFALMAEnv(gym.Env):
                 except Exception as e:
                     # Fallback to standard pruning if rate-distortion fails
                     print(f"Rate-distortion failed, falling back to standard pruning: {e}")
-                    kept_facts, removed_facts, stats = apply_ofalma(
+                    kept_facts, removed_facts, stats = apply_falma(
                         self.current_facts, 
                         self.buffer_size,
                         impact_factors_list=impact_factors_list,
@@ -433,10 +433,10 @@ class OFALMAEnv(gym.Env):
                         token_model=token_model
                     )
             else:
-                # Use standard OFALMA pruning
+                # Use standard FALMA pruning
                 impact_model = getattr(self, 'impact_model', None)
                 token_model = getattr(self, 'token_model', None)
-            kept_facts, removed_facts, stats = apply_ofalma(
+            kept_facts, removed_facts, stats = apply_falma(
                 self.current_facts, 
                     self.buffer_size,
                     impact_factors_list=impact_factors_list,
@@ -545,7 +545,7 @@ class OFALMAEnv(gym.Env):
             traceback.print_exc()
         
         finally:
-            ofalma.theta = original_theta
+            falma.theta = original_theta
         
         state = self._encode_dialogue(self.current_dialogue, dialogue_id=self.current_dialogue_id)
         

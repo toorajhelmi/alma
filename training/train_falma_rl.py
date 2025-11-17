@@ -1,4 +1,4 @@
-"""Train OFALMA coefficients using PPO."""
+"""Train FALMA coefficients using PPO."""
 import argparse
 import json
 import os
@@ -18,7 +18,7 @@ from tqdm.auto import tqdm
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-from training.ofalma_env import OFALMAEnv
+from training.falma_env import FALMAEnv
 from main import OPENAI_API_KEY
 from llm import get_provider, TogetherAI, Gpt
 
@@ -42,7 +42,7 @@ def find_latest_checkpoint(output_dir: str) -> Optional[str]:
     candidates = []
     if checkpoint_dir.exists():
         candidates = sorted(
-            checkpoint_dir.glob("ppo_ofalma_*.zip"),
+            checkpoint_dir.glob("ppo_falma_*.zip"),
             key=lambda p: p.stat().st_mtime,
             reverse=True,
         )
@@ -131,7 +131,7 @@ def create_env(dialogues: List[Dict], llm: Optional[ChatOpenAI] = None, buffer_s
                api_key: Optional[str] = None, use_rate_distortion: bool = False,
                condensation_model: Optional[str] = None, evaluation_model: Optional[str] = None,
                impact_model: Optional[str] = None, token_model: Optional[str] = None):
-    """Create OFALMA environment (encodings will be auto-loaded/computed)."""
+    """Create FALMA environment (encodings will be auto-loaded/computed)."""
     # Register models in this process (important for subprocess environments)
     provider = get_provider()
     if model_name and api_key:
@@ -175,7 +175,7 @@ def create_env(dialogues: List[Dict], llm: Optional[ChatOpenAI] = None, buffer_s
         if model_name is None or api_key is None:
             raise ValueError("Either llm or both model_name and api_key must be provided")
         llm = ChatOpenAI(model=model_name, temperature=0, openai_api_key=api_key)
-    env = OFALMAEnv(dialogues, llm, buffer_size=buffer_size, encodings_file=encodings_file, 
+    env = FALMAEnv(dialogues, llm, buffer_size=buffer_size, encodings_file=encodings_file, 
                    use_rate_distortion=use_rate_distortion, condensation_model=condensation_model,
                    evaluation_model=evaluation_model, impact_model=impact_model, token_model=token_model)
     return env
@@ -185,7 +185,7 @@ def train_ppo(
     train_dialogues: List[Dict],
     val_dialogues: List[Dict],
     llm: ChatOpenAI,
-    output_dir: str = "models/ofalma_ppo",
+    output_dir: str = "models/falma_ppo",
     total_timesteps: int = 10000,
     buffer_size: int = 160,
     learning_rate: float = 1e-3,
@@ -207,7 +207,7 @@ def train_ppo(
     lr_threshold: float = 0.5,
     min_learning_rate: float = 1e-5,
 ):
-    """Train PPO agent to learn OFALMA coefficients."""
+    """Train PPO agent to learn FALMA coefficients."""
     os.makedirs(output_dir, exist_ok=True)
     logs_dir = Path(output_dir) / "logs"
     logs_dir.mkdir(parents=True, exist_ok=True)
@@ -215,8 +215,8 @@ def train_ppo(
     
     # Compute encodings for full dataset once (train + validation)
     all_dialogues = train_dialogues + val_dialogues
-    from training.ofalma_env import OFALMAEnv
-    temp_env = OFALMAEnv(all_dialogues, llm, buffer_size=buffer_size, encodings_file=encodings_file,
+    from training.falma_env import FALMAEnv
+    temp_env = FALMAEnv(all_dialogues, llm, buffer_size=buffer_size, encodings_file=encodings_file,
                         impact_model=impact_model)
     temp_env._load_or_compute_encodings(encodings_file)
     encodings_file = temp_env._get_encodings_file_path(encodings_file)
@@ -264,7 +264,7 @@ def train_ppo(
         train_env = DummyVecEnv([make_env(i) for i in range(n_envs)])
         val_env = DummyVecEnv([make_val_env(i) for i in range(min(n_envs, 2))])
     
-    from core.ofalma import theta
+    from core.falma import theta
     initial_coeffs = np.array([
         theta["S"],
         theta["R"],
@@ -337,7 +337,7 @@ def train_ppo(
     checkpoint_callback = CheckpointCallback(
         save_freq=2000,
         save_path=f"{output_dir}/checkpoints",
-        name_prefix="ppo_ofalma",
+        name_prefix="ppo_falma",
     )
     
     eval_callback = EvalCallback(
@@ -925,9 +925,9 @@ def evaluate_model(model, val_dialogues: List[Dict], llm: ChatOpenAI, buffer_siz
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Train OFALMA coefficients with PPO")
+    parser = argparse.ArgumentParser(description="Train FALMA coefficients with PPO")
     parser.add_argument("--dataset", type=str, default="data/dataset_100.json", help="Path to dataset JSON file")
-    parser.add_argument("--output", type=str, default="models/ofalma_ppo", help="Output directory for model")
+    parser.add_argument("--output", type=str, default="models/falma_ppo", help="Output directory for model")
     parser.add_argument("--timesteps", type=int, default=10000, help="Total training timesteps")
     parser.add_argument("--buffer-size", type=int, default=160, help="Token buffer size")
     parser.add_argument("--train-ratio", type=float, default=0.8, help="Train/validation split ratio")

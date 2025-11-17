@@ -7,7 +7,7 @@ from langchain.memory import ConversationTokenBufferMemory
 from core.token_buffer_memory import TokenBufferMemory
 from core.token_buffer_memory_with_summary import TokenBufferMemoryWithSummary
 from core.token_buffer_memory_custom_summary import TokenBufferMemoryCustomSummary
-from core.ofalma import apply_ofalma, apply_ofalma_rate_distortion
+from core.falma import apply_falma, apply_falma_rate_distortion
 from core.experiment_utility import get_token_count_fn
 from llm import GetLlm, get_provider, Gpt, Llama
 from core.llm_utils import create_local_llm
@@ -275,7 +275,7 @@ FACTS = [
 QUESTION = ("Given these constraints, compute the minimum total project duration. "
             "Return only a single integer (the total days). If you cannot determine it, return 0.")
 
-def run_ofalma(
+def run_falma(
     facts,
     question,
     buffer_size=160,
@@ -285,14 +285,14 @@ def run_ofalma(
     evaluation_model: str = None,
     display: bool = True,
 ):
-    """Run OFALMA-based pruning and send to LLM."""
+    """Run FALMA-based pruning and send to LLM."""
     if display:
-        print("\n=== Memory type: ofalma ===")
+        print("\n=== Memory type: falma ===")
     
-    kept_facts, removed_facts, stats = apply_ofalma(facts, buffer_size, impact_model=impact_model, token_model=token_model)
+    kept_facts, removed_facts, stats = apply_falma(facts, buffer_size, impact_model=impact_model, token_model=token_model)
     
     if verbose:
-        print(f"\nOFALMA Pruning Stats:")
+        print(f"\nFALMA Pruning Stats:")
         print(f"  Total facts: {stats['total_facts']}")
         print(f"  Final kept: {stats['final_kept']}")
         print(f"  Facts removed: {len(removed_facts)}")
@@ -347,7 +347,7 @@ def run_ofalma(
     return outcome
 
 
-def run_ofalma_rate_distortion(
+def run_falma_rate_distortion(
     facts,
     question,
     buffer_size=160,
@@ -359,11 +359,11 @@ def run_ofalma_rate_distortion(
     evaluation_model: str = None,
     display: bool = True,
 ):
-    """Run OFALMA rate-distortion based condensation and send to LLM."""
+    """Run FALMA rate-distortion based condensation and send to LLM."""
     if display:
-        print("\n=== Memory type: ofalma_rate_distortion ===")
+        print("\n=== Memory type: falma_rate_distortion ===")
     
-    condensed_facts, stats = apply_ofalma_rate_distortion(
+    condensed_facts, stats = apply_falma_rate_distortion(
         facts, 
         buffer_size,
         k=k,
@@ -373,7 +373,7 @@ def run_ofalma_rate_distortion(
     )
     
     if verbose:
-        print(f"\nOFALMA Rate-Distortion Stats:")
+        print(f"\nFALMA Rate-Distortion Stats:")
         print(f"  Total facts: {stats['total_facts']}")
         print(f"  Condensed facts: {stats.get('condensed_facts_count', len(condensed_facts))}")
         print(f"  Removed facts: {stats.get('removed_facts_count', 0)}")
@@ -477,12 +477,12 @@ if __name__ == "__main__":
     
     VERBOSE = True
     
-    # Test OFALMA (pruning approach)
-    # run_ofalma(FACTS, QUESTION, buffer_size=160, verbose=VERBOSE)
+    # Test FALMA (pruning approach)
+    # run_falma(FACTS, QUESTION, buffer_size=160, verbose=VERBOSE)
     
-    # Test OFALMA Rate-Distortion (condensation approach)
+    # Test FALMA Rate-Distortion (condensation approach)
     # print("\n" + "="*60)
-    # run_ofalma_rate_distortion(FACTS, QUESTION, buffer_size=160, verbose=VERBOSE, k=3.0)
+    # run_falma_rate_distortion(FACTS, QUESTION, buffer_size=160, verbose=VERBOSE, k=3.0)
     
     # Test Custom Summary
     print("\n" + "="*60)

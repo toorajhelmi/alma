@@ -5,7 +5,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from typing import List, Dict
 # Lazy imports to avoid langchain issues
-# from core.ofalma import llm_impact_factors
+# from core.falma import llm_impact_factors
 from llm import get_provider, Gpt, Llama, TogetherAI
 from langchain_openai import ChatOpenAI
 from main import OPENAI_API_KEY
@@ -40,7 +40,7 @@ def compare_impact_factors(dialogue: List[str]) -> Dict:
         Dictionary with GPT and Llama impact factors, plus comparison metrics
     """
     # Import here to avoid circular imports
-    from core.ofalma import llm_impact_factors as llm_impact_factors_fn
+    from core.falma import llm_impact_factors as llm_impact_factors_fn
     import llm
     
     provider = get_provider()
@@ -53,22 +53,22 @@ def compare_impact_factors(dialogue: List[str]) -> Dict:
     try:
         gpt_llm = provider._llms['gpt4']
         
-        # Patch GetLlm in both llm module and core.ofalma module
-        import core.ofalma as ofalma_module
+        # Patch GetLlm in both llm module and core.falma module
+        import core.falma as falma_module
         original_get_llm_llm = llm.GetLlm
-        original_get_llm_ofalma = ofalma_module.GetLlm
+        original_get_llm_falma = falma_module.GetLlm
         
         def force_gpt(*args, **kwargs):
             return gpt_llm
         
         llm.GetLlm = force_gpt
-        ofalma_module.GetLlm = force_gpt
+        falma_module.GetLlm = force_gpt
         
         # GPT uses batch approach (per_turn=False) for stronger models
         gpt_factors = llm_impact_factors_fn(dialogue, verbose=False, per_turn=False)
         
         llm.GetLlm = original_get_llm_llm
-        ofalma_module.GetLlm = original_get_llm_ofalma
+        falma_module.GetLlm = original_get_llm_falma
         
         elapsed = time.time() - start
         print(f"  ✓ GPT factors computed: {len(gpt_factors)} factors in {elapsed:.1f}s")
@@ -89,16 +89,16 @@ def compare_impact_factors(dialogue: List[str]) -> Dict:
         if 'llama' in provider._llms:
             llama_llm = provider._llms['llama']
             
-            # Patch GetLlm in both llm module and core.ofalma module
-            import core.ofalma as ofalma_module
+            # Patch GetLlm in both llm module and core.falma module
+            import core.falma as falma_module
             original_get_llm_llm = llm.GetLlm
-            original_get_llm_ofalma = ofalma_module.GetLlm
+            original_get_llm_falma = falma_module.GetLlm
             
             def force_llama(*args, **kwargs):
                 return llama_llm
             
             llm.GetLlm = force_llama
-            ofalma_module.GetLlm = force_llama
+            falma_module.GetLlm = force_llama
             
             # Llama uses per-turn approach (per_turn=True) for weaker models
             print("    → Using per-turn approach for Llama...")
@@ -106,7 +106,7 @@ def compare_impact_factors(dialogue: List[str]) -> Dict:
             llama_available = True
             
             llm.GetLlm = original_get_llm_llm
-            ofalma_module.GetLlm = original_get_llm_ofalma
+            falma_module.GetLlm = original_get_llm_falma
             
             elapsed = time.time() - start
             print(f"  ✓ Together.ai Llama factors computed: {len(llama_factors)} factors in {elapsed:.1f}s")

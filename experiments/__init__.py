@@ -1,2 +1,2 @@
-"""Experiment utilities for OFALMA comparisons."""
+"""Experiment utilities for FALMA comparisons."""
 

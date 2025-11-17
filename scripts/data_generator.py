@@ -114,7 +114,7 @@ class DataGenerator:
     def _generate_with_gpt(self, problem_type: str) -> Tuple[List[str], int, str, str]:
         """Generate a dialogue using GPT in two steps."""
         core_facts, answer, justification = self._step1_generate_core(problem_type)
-        dialogue = self._step2_apply_ofalma_factors(core_facts, problem_type)
+        dialogue = self._step2_apply_falma_factors(core_facts, problem_type)
         
         return dialogue, answer, justification, problem_type
     
@@ -174,19 +174,19 @@ Example format:
             print(f"Content: {content[:200]}...")
             return ["Error generating core facts"], 0, "Error generating justification"
     
-    def _step2_apply_ofalma_factors(self, core_dialogue: List[str], problem_type: str) -> List[str]:
-        """Step 2: Apply OFALMA impact factors to create full dialogue."""
+    def _step2_apply_falma_factors(self, core_dialogue: List[str], problem_type: str) -> List[str]:
+        """Step 2: Apply FALMA impact factors to create full dialogue."""
         core_facts = core_dialogue[:-1]  # All except question
         question = core_dialogue[-1]  # Last item is question
         
-        prompt = f"""Given these core facts for a {problem_type} problem, expand the dialogue into a natural, fluent conversation that applies OFALMA impact factors organically.
+        prompt = f"""Given these core facts for a {problem_type} problem, expand the dialogue into a natural, fluent conversation that applies FALMA impact factors organically.
 
 Core facts (must be kept, placed early):
 {chr(10).join(f"  - {fact}" for fact in core_facts)}
 
 Create a natural dialogue that feels like a real conversation or documentation. The structure should naturally emphasize important information early and include less relevant details later, without explicit markers like "CRITICAL" or "MUST".
 
-OFALMA Impact Factors (apply naturally, not explicitly):
+FALMA Impact Factors (apply naturally, not explicitly):
 - S (Surprisal): New/unexpected information
 - R (Recency): Position in dialogue (later = higher)
 - Q (Relevance/Clarity): Relevance to solving the problem
