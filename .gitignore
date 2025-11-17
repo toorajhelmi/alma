@@ -2,10 +2,8 @@ __pycache__/
 venv/
 venv_py311/
 *.log
-encodings/
+data/encodings/
 models/
-training_log.txt
-training_rd.log
-training_verify.log
-generation_log.txt
+logs/
+experiments_logs/
 

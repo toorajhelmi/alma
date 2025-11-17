@@ -26,7 +26,7 @@ python3.12 --version
 
 3. **Install all dependencies**:
    ```bash
-   pip install -r requirements_rl.txt
+   pip install -r requirements/rl.txt
    ```
 
 ### If Python 3.12 is NOT available:
@@ -36,7 +36,7 @@ python3.12 --version
 brew install python@3.12
 python3.12 -m venv venv
 source venv/bin/activate
-pip install -r requirements_rl.txt
+pip install -r requirements/rl.txt
 ```
 
 **Or use pyenv:**
@@ -46,7 +46,7 @@ pyenv install 3.12.7
 pyenv local 3.12.7
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements_rl.txt
+pip install -r requirements/rl.txt
 ```
 
 ## Verify Installation

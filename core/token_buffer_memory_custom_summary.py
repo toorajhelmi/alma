@@ -111,6 +111,15 @@ Provide only the summary, no additional explanation:"""
             return
 
         full_text = "\n".join(self.raw_facts)
+        full_tokens = self.token_count_fn(full_text)
+
+        if full_tokens <= self.max_token_limit:
+            # Facts already fit; keep full text so higher budgets retain detail.
+            self.summary = full_text
+            self.total_tokens = full_tokens
+            self.summary_generated = True
+            return
+
         prompt = self._build_full_summary_prompt(full_text)
 
         try:

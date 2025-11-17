@@ -9,7 +9,7 @@ theta = {
     "R": 0.2,
     "Q": 0.7,
     "E": 0.4
-}  
+}
 
 def llm_impact_factors_per_turn(dialogue, verbose=False, impact_model: str = None):
     """Ask LLM to compute impact factors one turn at a time (for weaker models)."""
@@ -150,7 +150,7 @@ Example format: [{{"S": 0.3, "Q": 0.8, "E": 0.5}}, {{"S": 0.7, "Q": 0.6, "E": 0.
     fence = re.search(r"```(?:json)?\s*([\s\S]*?)```", candidate, re.IGNORECASE)
     if fence:
         candidate = fence.group(1).strip()
-    
+
     # Try to find JSON array pattern: [{"S": ...}, ...]
     json_match = re.search(r'\[[\s\S]*?\{[\s\S]*?"S"[\s\S]*?\}[\s\S]*?\]', candidate)
     if json_match:
@@ -414,9 +414,9 @@ def apply_ofalma_rate_distortion(
     alpha = 1.0
     if total_initial_tokens > max_tokens:
         alpha = max_tokens / total_initial_tokens  # Scale down to fit
-    elif total_initial_tokens > 0:
+    elif 0 < total_initial_tokens < max_tokens:
         alpha = max_tokens / total_initial_tokens  # Scale up to use full budget
-    # If total_initial_tokens == 0, keep alpha = 1.0
+    # If total_initial_tokens is 0 or exactly equals max_tokens, keep alpha = 1.0
     
     # Calculate target tokens for each fact
     for item in fact_data:

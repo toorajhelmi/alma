@@ -92,7 +92,7 @@ class OFALMAEnv(gym.Env):
         if encodings_file:
             return encodings_file
         dataset_hash = self._compute_dataset_hash(self.dialogues)
-        return f"encodings/dataset_{dataset_hash}.encodings.npz"
+        return f"data/encodings/dataset_{dataset_hash}.encodings.npz"
     
     def _verify_encodings_match(self, dialogues: List[Dict], encoding_data: Dict) -> bool:
         """Verify that encodings contain all needed dialogues (can be from larger dataset)."""
@@ -436,13 +436,13 @@ class OFALMAEnv(gym.Env):
                 # Use standard OFALMA pruning
                 impact_model = getattr(self, 'impact_model', None)
                 token_model = getattr(self, 'token_model', None)
-                kept_facts, removed_facts, stats = apply_ofalma(
-                    self.current_facts, 
+            kept_facts, removed_facts, stats = apply_ofalma(
+                self.current_facts, 
                     self.buffer_size,
                     impact_factors_list=impact_factors_list,
                     impact_model=impact_model,
                     token_model=token_model
-                )
+            )
             
             prompt_parts = []
             if kept_facts:

@@ -20,13 +20,13 @@ python training/train_ofalma_rl.py \
 ```bash
 python training/train_ofalma_rl.py \
     --dataset data/dataset_100.json \
-    --encodings encodings/custom.encodings.json
+    --encodings data/encodings/custom.encodings.json
 ```
 
 ## How It Works
 
 The environment (`ofalma_env.py`) automatically handles encodings:
-1. **Auto-detects encoding file path** based on dataset hash: `encodings/dataset_{hash}.encodings.json`
+1. **Auto-detects encoding file path** based on dataset hash: `data/encodings/dataset_{hash}.encodings.json`
 2. **Checks if file exists** and matches the dataset (via hash)
 3. **If exists + matches**: Loads pre-computed encodings ✓
 4. **If missing or doesn't match**: Computes encodings on-the-fly and saves them
